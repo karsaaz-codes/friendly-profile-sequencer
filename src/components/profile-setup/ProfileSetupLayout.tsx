@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useProfile } from "../../contexts/ProfileContext";
 import { Progress } from "../../components/ui/progress";
@@ -15,8 +16,8 @@ const ProfileSetupLayout: React.FC<ProfileSetupLayoutProps> = ({ children }) => 
   const progressPercentage = Math.round((currentStep / totalSteps) * 100);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-secondary/30 to-background p-4 sm:p-6">
-      <Card className="w-full max-w-3xl p-6 sm:p-8 shadow-xl border-none">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-secondary/30 to-background p-4 sm:p-6 transition-all duration-300">
+      <Card className="w-full max-w-3xl p-6 sm:p-8 shadow-xl border-none animate-fade-in">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-center mb-2">Complete Your Profile</h1>
           <p className="text-muted-foreground text-center mb-4">Step {currentStep + 1} of {steps.length}</p>
@@ -32,7 +33,7 @@ const ProfileSetupLayout: React.FC<ProfileSetupLayoutProps> = ({ children }) => 
                     : index < currentStep 
                       ? "text-muted-foreground" 
                       : "text-muted-foreground/50"
-                }`}
+                } transition-colors duration-200`}
               >
                 {step.title}
               </div>
@@ -40,7 +41,9 @@ const ProfileSetupLayout: React.FC<ProfileSetupLayoutProps> = ({ children }) => 
           </div>
         </div>
         
-        {children}
+        <div className="step-content-wrapper">
+          {children}
+        </div>
       </Card>
       
       <p className="mt-4 text-sm text-muted-foreground text-center">
