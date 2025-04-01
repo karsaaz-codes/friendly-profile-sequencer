@@ -1,9 +1,11 @@
+
 import React, { useState } from "react";
 import { useProfile } from "../../contexts/ProfileContext";
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
-import { Label } from "../../components/ui/label";
-import { Textarea } from "../../components/ui/textarea";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { Textarea } from "../ui/textarea";
+import BackButton from "./BackButton";
 
 const AboutStep = () => {
   const { profileData, updateProfileData, saveAndContinue, skipStep } = useProfile();
@@ -55,15 +57,18 @@ const AboutStep = () => {
       </div>
 
       <div className="flex justify-between pt-4">
-        <Button variant="ghost" onClick={skipStep}>
-          Skip
-        </Button>
-        <Button 
-          onClick={handleContinue}
-          disabled={!jobTitle.trim() && !company.trim() && !bio.trim()}
-        >
-          Continue
-        </Button>
+        <BackButton />
+        <div className="flex gap-2">
+          <Button variant="ghost" onClick={skipStep}>
+            Skip
+          </Button>
+          <Button 
+            onClick={handleContinue}
+            disabled={!jobTitle.trim() && !company.trim() && !bio.trim()}
+          >
+            Continue
+          </Button>
+        </div>
       </div>
     </div>
   );

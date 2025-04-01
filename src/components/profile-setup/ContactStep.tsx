@@ -1,10 +1,11 @@
 
 import React, { useState } from "react";
-import { useProfile } from "@/contexts/ProfileContext";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useProfile } from "../../contexts/ProfileContext";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 import { Github, Globe, Linkedin, Mail, Twitter } from "lucide-react";
+import BackButton from "./BackButton";
 
 const ContactStep = () => {
   const { profileData, updateProfileData, saveAndContinue, skipStep } = useProfile();
@@ -98,12 +99,15 @@ const ContactStep = () => {
       </div>
 
       <div className="flex justify-between pt-4">
-        <Button variant="ghost" onClick={skipStep}>
-          Skip
-        </Button>
-        <Button onClick={handleContinue} disabled={email && !/^\S+@\S+\.\S+$/.test(email)}>
-          Continue
-        </Button>
+        <BackButton />
+        <div className="flex gap-2">
+          <Button variant="ghost" onClick={skipStep}>
+            Skip
+          </Button>
+          <Button onClick={handleContinue} disabled={email && !/^\S+@\S+\.\S+$/.test(email)}>
+            Continue
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -12,6 +12,7 @@ interface ProfileContextType {
   isCompleted: boolean;
   saveAndContinue: () => void;
   skipStep: () => void;
+  goToPreviousStep: () => void;
 }
 
 const defaultProfileData: ProfileData = {
@@ -56,14 +57,11 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children })
   };
 
   const saveAndContinue = () => {
-    // Mark current step as completed
     const currentStepId = steps[currentStep].id;
     updateStepStatus(currentStepId, "completed");
     
-    // Move to next step
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
-      // Mark next step as in-progress
       const nextStepId = steps[currentStep + 1].id;
       updateStepStatus(nextStepId, "in-progress");
     } else {
@@ -77,18 +75,29 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children })
   };
 
   const skipStep = () => {
-    // Mark current step as skipped
     const currentStepId = steps[currentStep].id;
     updateStepStatus(currentStepId, "skipped");
     
-    // Move to next step
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
-      // Mark next step as in-progress
       const nextStepId = steps[currentStep + 1].id;
       updateStepStatus(nextStepId, "in-progress");
     } else {
       setIsCompleted(true);
+    }
+  };
+
+  const goToPreviousStep = () => {
+    if (currentStep > 0) {
+      const currentStepId = steps[currentStep].id;
+      if (steps[currentStep].status === "in-progress") {
+        updateStepStatus(currentStepId, "not-started");
+      }
+      
+      setCurrentStep(currentStep - 1);
+      
+      const prevStepId = steps[currentStep - 1].id;
+      updateStepStatus(prevStepId, "in-progress");
     }
   };
 
@@ -104,6 +113,7 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children })
         isCompleted,
         saveAndContinue,
         skipStep,
+        goToPreviousStep,
       }}
     >
       {children}

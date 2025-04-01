@@ -1,10 +1,11 @@
 
 import React, { useState } from "react";
 import { useProfile } from "../../contexts/ProfileContext";
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
-import { Label } from "../../components/ui/label";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 import { MapPin } from "lucide-react";
+import BackButton from "./BackButton";
 
 const LocationStep = () => {
   const { profileData, updateProfileData, saveAndContinue, skipStep } = useProfile();
@@ -40,12 +41,15 @@ const LocationStep = () => {
       </div>
 
       <div className="flex justify-between pt-4">
-        <Button variant="ghost" onClick={skipStep}>
-          Skip
-        </Button>
-        <Button onClick={handleContinue} disabled={!location.trim()}>
-          Continue
-        </Button>
+        <BackButton />
+        <div className="flex gap-2">
+          <Button variant="ghost" onClick={skipStep}>
+            Skip
+          </Button>
+          <Button onClick={handleContinue} disabled={!location.trim()}>
+            Continue
+          </Button>
+        </div>
       </div>
     </div>
   );
