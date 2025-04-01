@@ -1,13 +1,12 @@
-
 import React, { useEffect } from "react";
-import { ProfileProvider, useProfile } from "@/contexts/ProfileContext";
-import ProfileSetupLayout from "@/components/profile-setup/ProfileSetupLayout";
-import BasicInfoStep from "@/components/profile-setup/BasicInfoStep";
-import AboutStep from "@/components/profile-setup/AboutStep";
-import SkillsStep from "@/components/profile-setup/SkillsStep";
-import LocationStep from "@/components/profile-setup/LocationStep";
-import ContactStep from "@/components/profile-setup/ContactStep";
-import CompleteStep from "@/components/profile-setup/CompleteStep";
+import { ProfileProvider, useProfile } from "../contexts/ProfileContext";
+import ProfileSetupLayout from "../components/profile-setup/ProfileSetupLayout";
+import BasicInfoStep from "../components/profile-setup/BasicInfoStep";
+import AboutStep from "../components/profile-setup/AboutStep";
+import SkillsStep from "../components/profile-setup/SkillsStep";
+import LocationStep from "../components/profile-setup/LocationStep";
+import ContactStep from "../components/profile-setup/ContactStep";
+import CompleteStep from "../components/profile-setup/CompleteStep";
 
 const ProfileSetupContent = () => {
   const { currentStep, steps, updateStepStatus } = useProfile();

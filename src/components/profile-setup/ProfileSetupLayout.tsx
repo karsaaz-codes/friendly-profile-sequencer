@@ -1,8 +1,7 @@
-
 import React from "react";
-import { useProfile } from "@/contexts/ProfileContext";
-import { Progress } from "@/components/ui/progress";
-import { Card } from "@/components/ui/card";
+import { useProfile } from "../../contexts/ProfileContext";
+import { Progress } from "../../components/ui/progress";
+import { Card } from "../../components/ui/card";
 
 interface ProfileSetupLayoutProps {
   children: React.ReactNode;

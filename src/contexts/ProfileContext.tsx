@@ -1,7 +1,6 @@
-
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { ProfileData, ProfileStep } from "@/types/profile";
-import { toast } from "@/components/ui/use-toast";
+import { ProfileData, ProfileStep } from "../types/profile";
+import { toast } from "../components/ui/use-toast";
 
 interface ProfileContextType {
   profileData: ProfileData;

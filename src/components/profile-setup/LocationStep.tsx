@@ -1,9 +1,9 @@
 
 import React, { useState } from "react";
-import { useProfile } from "@/contexts/ProfileContext";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useProfile } from "../../contexts/ProfileContext";
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
+import { Label } from "../../components/ui/label";
 import { MapPin } from "lucide-react";
 
 const LocationStep = () => {

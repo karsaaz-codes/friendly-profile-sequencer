@@ -1,7 +1,7 @@
 
 import React from "react";
-import { useProfile } from "@/contexts/ProfileContext";
-import { Button } from "@/components/ui/button";
+import { useProfile } from "../../contexts/ProfileContext";
+import { Button } from "../../components/ui/button";
 import { CheckCircle2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
