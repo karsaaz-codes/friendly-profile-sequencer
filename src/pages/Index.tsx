@@ -17,7 +17,7 @@ export default function Index() {
                   Get started by setting up your profile or providing additional information.
                 </p>
               </div>
-              <div className="space-x-4">
+              <div className="flex flex-wrap justify-center gap-4">
                 <Link to="/profile-setup">
                   <Button>Setup Profile</Button>
                 </Link>
@@ -26,6 +26,9 @@ export default function Index() {
                 </Link>
                 <Link to="/experience">
                   <Button variant="secondary">Add Experience</Button>
+                </Link>
+                <Link to="/certification">
+                  <Button variant="outline">Add Certifications</Button>
                 </Link>
               </div>
             </div>

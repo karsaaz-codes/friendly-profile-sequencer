@@ -18,80 +18,65 @@ import { Checkbox } from "../components/ui/checkbox";
 import { 
   Briefcase, 
   Building, 
-  Calendar, 
-  GraduationCap,
-  Award
+  Clock,
+  Tag,
+  ChevronRight
 } from "lucide-react";
 
 interface Experience {
-  company: string;
-  position: string;
-  startDate: string;
-  endDate: string;
-  currentlyWorking: boolean;
+  job_title: string;
+  employer: string;
+  duration: number; // in months
   description: string;
-  achievements: string[];
+  skills: string[];
 }
 
 const ExperienceForm = () => {
   const navigate = useNavigate();
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [newExperience, setNewExperience] = useState<Experience>({
-    company: "",
-    position: "",
-    startDate: "",
-    endDate: "",
-    currentlyWorking: false,
+    job_title: "",
+    employer: "",
+    duration: 0,
     description: "",
-    achievements: []
+    skills: []
   });
-  const [newAchievement, setNewAchievement] = useState("");
+  const [newSkill, setNewSkill] = useState("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setNewExperience({ ...newExperience, [name]: value });
-  };
-
-  const handleCheckboxChange = (checked: boolean) => {
-    setNewExperience({ 
-      ...newExperience, 
-      currentlyWorking: checked,
-      endDate: checked ? "" : newExperience.endDate 
-    });
-  };
-
-  const addAchievement = () => {
-    if (newAchievement.trim()) {
-      setNewExperience({
-        ...newExperience,
-        achievements: [...newExperience.achievements, newAchievement.trim()]
-      });
-      setNewAchievement("");
+    
+    // Special handling for duration as a number
+    if (name === 'duration') {
+      setNewExperience({ ...newExperience, [name]: parseInt(value) || 0 });
+    } else {
+      setNewExperience({ ...newExperience, [name]: value });
     }
   };
 
-  const removeAchievement = (index: number) => {
+  const addSkill = () => {
+    if (newSkill.trim()) {
+      setNewExperience({
+        ...newExperience,
+        skills: [...newExperience.skills, newSkill.trim()]
+      });
+      setNewSkill("");
+    }
+  };
+
+  const removeSkill = (index: number) => {
     setNewExperience({
       ...newExperience,
-      achievements: newExperience.achievements.filter((_, i) => i !== index)
+      skills: newExperience.skills.filter((_, i) => i !== index)
     });
   };
 
   const addExperience = () => {
     // Validate required fields
-    if (!newExperience.company || !newExperience.position || !newExperience.startDate) {
+    if (!newExperience.job_title || !newExperience.employer || !newExperience.description || newExperience.duration <= 0) {
       toast({
         title: "Missing information",
-        description: "Please fill in company, position, and start date.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    if (!newExperience.currentlyWorking && !newExperience.endDate) {
-      toast({
-        title: "Missing end date",
-        description: "Please provide an end date or check 'Currently working here'.",
+        description: "Please fill in all required fields and ensure duration is greater than 0.",
         variant: "destructive"
       });
       return;
@@ -99,13 +84,11 @@ const ExperienceForm = () => {
 
     setExperiences([...experiences, newExperience]);
     setNewExperience({
-      company: "",
-      position: "",
-      startDate: "",
-      endDate: "",
-      currentlyWorking: false,
+      job_title: "",
+      employer: "",
+      duration: 0,
       description: "",
-      achievements: []
+      skills: []
     });
 
     toast({
@@ -129,8 +112,8 @@ const ExperienceForm = () => {
       description: "Your work experience has been saved successfully."
     });
 
-    // Navigate to dashboard after submission
-    navigate("/dashboard");
+    // Navigate to certification page after submission
+    navigate("/certification");
   };
 
   return (
@@ -140,7 +123,7 @@ const ExperienceForm = () => {
         <div className="text-center">
           <h1 className="text-2xl font-bold">Professional Experience</h1>
           <p className="text-muted-foreground mt-2">
-            Tell us about your work history and professional achievements
+            Tell us about your work history and professional skills
           </p>
         </div>
       </div>
@@ -160,10 +143,10 @@ const ExperienceForm = () => {
                   <CardHeader className="pb-2">
                     <div className="flex justify-between items-start">
                       <div>
-                        <CardTitle className="text-lg">{exp.position}</CardTitle>
+                        <CardTitle className="text-lg">{exp.job_title}</CardTitle>
                         <CardDescription className="flex items-center gap-1">
                           <Building className="h-4 w-4" /> 
-                          {exp.company}
+                          {exp.employer}
                         </CardDescription>
                       </div>
                       <Button 
@@ -178,24 +161,27 @@ const ExperienceForm = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="text-sm text-muted-foreground flex items-center gap-1 mb-2">
-                      <Calendar className="h-4 w-4" /> 
-                      {exp.startDate} - {exp.currentlyWorking ? "Present" : exp.endDate}
+                      <Clock className="h-4 w-4" /> 
+                      {exp.duration} {exp.duration === 1 ? 'month' : 'months'}
                     </div>
                     
-                    {exp.description && (
-                      <p className="text-sm mt-2">{exp.description}</p>
-                    )}
+                    <p className="text-sm mt-2">{exp.description}</p>
                     
-                    {exp.achievements.length > 0 && (
+                    {exp.skills.length > 0 && (
                       <div className="mt-3">
-                        <div className="text-sm font-medium flex items-center gap-1 mb-1">
-                          <Award className="h-4 w-4" /> Key Achievements
+                        <div className="text-sm font-medium flex items-center gap-1 mb-2">
+                          <Tag className="h-4 w-4" /> Skills
                         </div>
-                        <ul className="list-disc list-inside text-sm space-y-1">
-                          {exp.achievements.map((achievement, i) => (
-                            <li key={i}>{achievement}</li>
+                        <div className="flex flex-wrap gap-2">
+                          {exp.skills.map((skill, i) => (
+                            <span 
+                              key={i} 
+                              className="bg-secondary text-secondary-foreground px-2 py-1 rounded-md text-xs"
+                            >
+                              {skill}
+                            </span>
                           ))}
-                        </ul>
+                        </div>
                       </div>
                     )}
                   </CardContent>
@@ -209,7 +195,7 @@ const ExperienceForm = () => {
         <Card>
           <CardHeader>
             <CardTitle className="text-xl flex items-center gap-2">
-              <GraduationCap className="h-5 w-5" /> 
+              <Briefcase className="h-5 w-5" /> 
               Add New Experience
             </CardTitle>
             <CardDescription>
@@ -217,68 +203,47 @@ const ExperienceForm = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {/* Company and Position */}
+            {/* Job Title and Employer */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="company">Company *</Label>
+                <Label htmlFor="job_title">Job Title *</Label>
                 <Input
-                  id="company"
-                  name="company"
-                  placeholder="Enter company name"
-                  value={newExperience.company}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="position">Position *</Label>
-                <Input
-                  id="position"
-                  name="position"
+                  id="job_title"
+                  name="job_title"
                   placeholder="Enter your job title"
-                  value={newExperience.position}
+                  value={newExperience.job_title}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="employer">Employer *</Label>
+                <Input
+                  id="employer"
+                  name="employer"
+                  placeholder="Enter company name"
+                  value={newExperience.employer}
                   onChange={handleInputChange}
                 />
               </div>
             </div>
 
-            {/* Dates */}
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="startDate">Start Date *</Label>
-                <Input
-                  id="startDate"
-                  name="startDate"
-                  type="date"
-                  value={newExperience.startDate}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="endDate">End Date {!newExperience.currentlyWorking && "*"}</Label>
-                <Input
-                  id="endDate"
-                  name="endDate"
-                  type="date"
-                  value={newExperience.endDate}
-                  onChange={handleInputChange}
-                  disabled={newExperience.currentlyWorking}
-                />
-              </div>
-            </div>
-
-            {/* Currently working */}
-            <div className="flex items-center space-x-2">
-              <Checkbox 
-                id="currentlyWorking"
-                checked={newExperience.currentlyWorking}
-                onCheckedChange={handleCheckboxChange}
+            {/* Duration */}
+            <div className="space-y-2">
+              <Label htmlFor="duration">Duration (months) *</Label>
+              <Input
+                id="duration"
+                name="duration"
+                type="number"
+                min="1"
+                placeholder="Enter duration in months"
+                value={newExperience.duration || ""}
+                onChange={handleInputChange}
               />
-              <Label htmlFor="currentlyWorking">I currently work here</Label>
             </div>
 
             {/* Description */}
             <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">Description *</Label>
               <Textarea
                 id="description"
                 name="description"
@@ -289,48 +254,54 @@ const ExperienceForm = () => {
               />
             </div>
 
-            {/* Achievements */}
+            {/* Skills */}
             <div className="space-y-2">
-              <Label>Key Achievements</Label>
+              <Label>Skills</Label>
               <div className="flex gap-2">
                 <Input
-                  placeholder="Add an achievement"
-                  value={newAchievement}
-                  onChange={(e) => setNewAchievement(e.target.value)}
+                  placeholder="Add a skill"
+                  value={newSkill}
+                  onChange={(e) => setNewSkill(e.target.value)}
                   className="flex-1"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      addSkill();
+                    }
+                  }}
                 />
                 <Button 
                   type="button" 
                   variant="outline" 
-                  onClick={addAchievement}
-                  disabled={!newAchievement.trim()}
+                  onClick={addSkill}
+                  disabled={!newSkill.trim()}
                 >
                   Add
                 </Button>
               </div>
 
-              {/* Achievement list */}
-              {newExperience.achievements.length > 0 && (
+              {/* Skills list */}
+              {newExperience.skills.length > 0 && (
                 <div className="mt-3">
-                  <ul className="space-y-1">
-                    {newExperience.achievements.map((achievement, index) => (
-                      <li 
+                  <div className="flex flex-wrap gap-2">
+                    {newExperience.skills.map((skill, index) => (
+                      <div 
                         key={index} 
-                        className="flex justify-between items-center p-2 rounded bg-muted/50 animate-fade-in"
+                        className="flex items-center gap-1 bg-secondary/50 rounded-full pl-3 pr-2 py-1 text-sm animate-fade-in"
                       >
-                        <span className="text-sm">{achievement}</span>
+                        {skill}
                         <Button 
                           size="sm" 
                           variant="ghost" 
-                          className="h-8 w-8 p-0" 
-                          onClick={() => removeAchievement(index)}
+                          className="h-5 w-5 p-0 rounded-full" 
+                          onClick={() => removeSkill(index)}
                         >
                           <span className="sr-only">Remove</span>
                           <span aria-hidden="true">×</span>
                         </Button>
-                      </li>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 </div>
               )}
             </div>
@@ -349,10 +320,10 @@ const ExperienceForm = () => {
         <div className="pt-4">
           <Button 
             type="submit" 
-            className="w-full py-6 text-base font-medium"
+            className="w-full py-6 text-base font-medium flex items-center justify-center gap-2"
             disabled={experiences.length === 0}
           >
-            Save and Continue
+            Continue to Certifications <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
       </form>
