@@ -24,6 +24,9 @@ export default function Index() {
                 <Link to="/user-data">
                   <Button variant="outline">Complete User Data</Button>
                 </Link>
+                <Link to="/experience">
+                  <Button variant="secondary">Add Experience</Button>
+                </Link>
               </div>
             </div>
           </div>

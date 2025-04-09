@@ -10,6 +10,7 @@ import ProfileSetup from "./pages/ProfileSetup";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import UserDataForm from "./pages/UserDataForm";
+import ExperienceForm from "./pages/ExperienceForm";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/user-data" element={<UserDataForm />} />
+          <Route path="/experience" element={<ExperienceForm />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
