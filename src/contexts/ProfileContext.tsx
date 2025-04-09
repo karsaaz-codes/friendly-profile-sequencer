@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import { ProfileData, ProfileStep } from "../types/profile";
 import { toast } from "../components/ui/use-toast";
@@ -13,6 +14,23 @@ interface ProfileContextType {
   saveAndContinue: () => void;
   skipStep: () => void;
   goToPreviousStep: () => void;
+  experiences: Experience[];
+  setExperiences: React.Dispatch<React.SetStateAction<Experience[]>>;
+  certifications: Certification[];
+  setCertifications: React.Dispatch<React.SetStateAction<Certification[]>>;
+}
+
+interface Experience {
+  job_title: string;
+  employer: string;
+  duration: number; // months
+  description: string;
+  skills: string[];
+}
+
+interface Certification {
+  title: string;
+  issued_by: string;
 }
 
 const defaultProfileData: ProfileData = {
@@ -33,6 +51,8 @@ const defaultSteps: ProfileStep[] = [
   { id: "skills", title: "Skills", status: "not-started" },
   { id: "location", title: "Location", status: "not-started" },
   { id: "contact", title: "Contact", status: "not-started" },
+  { id: "experience", title: "Experience", status: "not-started" },
+  { id: "certification", title: "Certification", status: "not-started" },
   { id: "complete", title: "Complete", status: "not-started" },
 ];
 
@@ -43,6 +63,8 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children })
   const [currentStep, setCurrentStep] = useState(0);
   const [steps, setSteps] = useState<ProfileStep[]>(defaultSteps);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [experiences, setExperiences] = useState<Experience[]>([]);
+  const [certifications, setCertifications] = useState<Certification[]>([]);
 
   const updateProfileData = (data: Partial<ProfileData>) => {
     setProfileData((prev) => ({ ...prev, ...data }));
@@ -114,6 +136,10 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children })
         saveAndContinue,
         skipStep,
         goToPreviousStep,
+        experiences,
+        setExperiences,
+        certifications,
+        setCertifications
       }}
     >
       {children}

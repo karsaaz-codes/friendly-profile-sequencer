@@ -1,3 +1,4 @@
+
 import React, { useEffect } from "react";
 import { ProfileProvider, useProfile } from "../contexts/ProfileContext";
 import ProfileSetupLayout from "../components/profile-setup/ProfileSetupLayout";
@@ -6,6 +7,8 @@ import AboutStep from "../components/profile-setup/AboutStep";
 import SkillsStep from "../components/profile-setup/SkillsStep";
 import LocationStep from "../components/profile-setup/LocationStep";
 import ContactStep from "../components/profile-setup/ContactStep";
+import ExperienceStep from "../components/profile-setup/ExperienceStep";
+import CertificationStep from "../components/profile-setup/CertificationStep";
 import CompleteStep from "../components/profile-setup/CompleteStep";
 
 const ProfileSetupContent = () => {
@@ -31,6 +34,10 @@ const ProfileSetupContent = () => {
       case 4:
         return <ContactStep />;
       case 5:
+        return <ExperienceStep />;
+      case 6:
+        return <CertificationStep />;
+      case 7:
         return <CompleteStep />;
       default:
         return <BasicInfoStep />;
