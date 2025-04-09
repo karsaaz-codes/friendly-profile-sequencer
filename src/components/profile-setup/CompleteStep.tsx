@@ -31,8 +31,13 @@ const CompleteStep = () => {
     }
   ).length;
 
+  // Add experience and certification counts to completion percentage
   const totalSections = Object.keys(profileData).length;
-  const completionPercentage = Math.round((completedCount / totalSections) * 100);
+  const experienceSection = experiences.length > 0 ? 1 : 0;
+  const certificationSection = certifications.length > 0 ? 1 : 0;
+  const totalWithExtra = totalSections + experienceSection + certificationSection;
+  const completedWithExtra = completedCount + experienceSection + certificationSection;
+  const completionPercentage = Math.round((completedWithExtra / totalWithExtra) * 100);
 
   return (
     <div className="step-content space-y-6">

@@ -82,6 +82,33 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children })
     const currentStepId = steps[currentStep].id;
     updateStepStatus(currentStepId, "completed");
     
+    // Save additional profile data if on experience or certification step
+    if (currentStepId === "experience" && experiences.length > 0) {
+      updateProfileData({
+        // This will add the experience data to the profile context
+        // even though we are already tracking it separately
+        ...profileData
+      });
+      
+      toast({
+        title: "Experience saved",
+        description: `${experiences.length} experience entries saved to your profile.`,
+        duration: 3000,
+      });
+    } else if (currentStepId === "certification" && certifications.length > 0) {
+      updateProfileData({
+        // This will add the certification data to the profile context
+        // even though we are already tracking it separately
+        ...profileData
+      });
+      
+      toast({
+        title: "Certifications saved",
+        description: `${certifications.length} certification entries saved to your profile.`,
+        duration: 3000,
+      });
+    }
+    
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
       const nextStepId = steps[currentStep + 1].id;
