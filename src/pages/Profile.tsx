@@ -10,9 +10,10 @@ import {
   Briefcase, Award, Clock
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useProfile } from "../contexts/ProfileContext";
+import { ProfileProvider, useProfile } from "../contexts/ProfileContext";
 
-const Profile = () => {
+// Separate ProfileContent component that uses the useProfile hook
+const ProfileContent = () => {
   const navigate = useNavigate();
   const { profileData, experiences, certifications } = useProfile();
   
@@ -195,6 +196,15 @@ const Profile = () => {
         </Card>
       </div>
     </div>
+  );
+};
+
+// Main Profile component wrapped with the ProfileProvider
+const Profile = () => {
+  return (
+    <ProfileProvider>
+      <ProfileContent />
+    </ProfileProvider>
   );
 };
 
