@@ -10,70 +10,24 @@ import {
   Briefcase, Award, Clock
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
-// Add interfaces for the experience and certification
-interface Experience {
-  job_title: string;
-  employer: string;
-  duration: number;
-  description: string;
-  skills: string[];
-}
-
-interface Certification {
-  title: string;
-  issued_by: string;
-}
+import { useProfile } from "../contexts/ProfileContext";
 
 const Profile = () => {
   const navigate = useNavigate();
+  const { profileData, experiences, certifications } = useProfile();
   
-  // In a real app, you'd get this from the ProfileContext or from an API
-  const profile = {
-    fullName: "Jane Doe",
-    profilePicture: null,
-    jobTitle: "Senior Product Designer",
-    company: "Design Company Inc.",
-    bio: "Passionate designer with 8+ years of experience creating user-centric digital experiences. I focus on accessible, beautiful, and functional design that solves real problems.",
-    skills: ["UI/UX Design", "Figma", "User Research", "Prototyping", "Design Systems"],
-    location: "San Francisco, CA",
-    contactEmail: "jane.doe@example.com",
-    socialLinks: {
-      linkedin: "https://linkedin.com/in/janedoe",
-      twitter: "https://twitter.com/janedoe",
-      github: "https://github.com/janedoe",
-      website: "https://janedoe.design"
-    }
-  };
-
-  // Sample experience and certification data
-  const experiences: Experience[] = [
-    {
-      job_title: "Senior Product Designer",
-      employer: "Design Company Inc.",
-      duration: 24,
-      description: "Led product design initiatives for enterprise clients, creating user-centric digital experiences.",
-      skills: ["UI/UX Design", "Figma", "User Research"]
-    },
-    {
-      job_title: "UX Designer",
-      employer: "Tech Solutions LLC",
-      duration: 18,
-      description: "Designed user interfaces for mobile applications with a focus on accessibility.",
-      skills: ["Wireframing", "Prototyping", "User Testing"]
-    }
-  ];
-
-  const certifications: Certification[] = [
-    {
-      title: "Certified UX Designer",
-      issued_by: "Interaction Design Foundation"
-    },
-    {
-      title: "Accessibility Specialist",
-      issued_by: "Web Accessibility Initiative (WAI)"
-    }
-  ];
+  // Extract profile data from context
+  const {
+    fullName,
+    profilePicture,
+    jobTitle,
+    company,
+    bio,
+    skills,
+    location,
+    contactEmail,
+    socialLinks
+  } = profileData;
 
   return (
     <div className="min-h-screen bg-background p-4 sm:p-6 md:p-8">
@@ -93,28 +47,28 @@ const Profile = () => {
           <CardHeader className="pb-0">
             <div className="flex flex-col sm:flex-row gap-4 items-center sm:items-start">
               <Avatar className="w-24 h-24 border-2 border-primary/20">
-                <AvatarImage src={profile.profilePicture || ""} alt={profile.fullName} />
+                <AvatarImage src={profilePicture || ""} alt={fullName} />
                 <AvatarFallback className="text-xl bg-primary/10 text-primary">
-                  {profile.fullName.split(" ").map(n => n[0]).join("").toUpperCase().substring(0, 2)}
+                  {fullName ? fullName.split(" ").map(n => n[0]).join("").toUpperCase().substring(0, 2) : "U"}
                 </AvatarFallback>
               </Avatar>
               
               <div className="text-center sm:text-left flex-1">
-                <h1 className="text-2xl font-bold">{profile.fullName}</h1>
-                <p className="text-muted-foreground">{profile.jobTitle}</p>
+                <h1 className="text-2xl font-bold">{fullName || "No Name Set"}</h1>
+                <p className="text-muted-foreground">{jobTitle || "No Title Set"}</p>
                 
                 <div className="flex flex-wrap gap-2 mt-2 justify-center sm:justify-start">
-                  {profile.company && (
+                  {company && (
                     <div className="flex items-center gap-1 text-sm text-muted-foreground">
                       <Building2 className="h-4 w-4" />
-                      <span>{profile.company}</span>
+                      <span>{company}</span>
                     </div>
                   )}
                   
-                  {profile.location && (
+                  {location && (
                     <div className="flex items-center gap-1 text-sm text-muted-foreground">
                       <MapPin className="h-4 w-4" />
-                      <span>{profile.location}</span>
+                      <span>{location}</span>
                     </div>
                   )}
                 </div>
@@ -123,18 +77,18 @@ const Profile = () => {
           </CardHeader>
           
           <CardContent className="pt-6 space-y-6">
-            {profile.bio && (
+            {bio && (
               <div>
                 <h2 className="text-md font-semibold mb-2">About</h2>
-                <p className="text-muted-foreground">{profile.bio}</p>
+                <p className="text-muted-foreground">{bio}</p>
               </div>
             )}
             
-            {profile.skills.length > 0 && (
+            {skills && skills.length > 0 && (
               <div>
                 <h2 className="text-md font-semibold mb-2">Skills</h2>
                 <div className="flex flex-wrap gap-2">
-                  {profile.skills.map(skill => (
+                  {skills.map(skill => (
                     <Badge key={skill} variant="secondary">
                       {skill}
                     </Badge>
@@ -146,7 +100,7 @@ const Profile = () => {
         </Card>
 
         {/* Experience Section */}
-        {experiences.length > 0 && (
+        {experiences && experiences.length > 0 && (
           <Card className="shadow-md border-none mb-6">
             <CardHeader>
               <h2 className="text-xl font-semibold flex items-center gap-2">
@@ -178,7 +132,7 @@ const Profile = () => {
         )}
 
         {/* Certifications Section */}
-        {certifications.length > 0 && (
+        {certifications && certifications.length > 0 && (
           <Card className="shadow-md border-none mb-6">
             <CardHeader>
               <h2 className="text-xl font-semibold flex items-center gap-2">
@@ -202,36 +156,36 @@ const Profile = () => {
           </CardHeader>
           <CardContent className="pt-0">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {profile.contactEmail && (
-                <a href={`mailto:${profile.contactEmail}`} className="flex items-center gap-2 text-sm hover:text-primary transition-colors">
+              {contactEmail && (
+                <a href={`mailto:${contactEmail}`} className="flex items-center gap-2 text-sm hover:text-primary transition-colors">
                   <Mail className="h-4 w-4" />
-                  <span>{profile.contactEmail}</span>
+                  <span>{contactEmail}</span>
                 </a>
               )}
               
-              {profile.socialLinks.linkedin && (
-                <a href={profile.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:text-primary transition-colors">
+              {socialLinks?.linkedin && (
+                <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:text-primary transition-colors">
                   <Linkedin className="h-4 w-4" />
                   <span>LinkedIn</span>
                 </a>
               )}
               
-              {profile.socialLinks.twitter && (
-                <a href={profile.socialLinks.twitter} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:text-primary transition-colors">
+              {socialLinks?.twitter && (
+                <a href={socialLinks.twitter} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:text-primary transition-colors">
                   <Twitter className="h-4 w-4" />
                   <span>Twitter</span>
                 </a>
               )}
               
-              {profile.socialLinks.github && (
-                <a href={profile.socialLinks.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:text-primary transition-colors">
+              {socialLinks?.github && (
+                <a href={socialLinks.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:text-primary transition-colors">
                   <Github className="h-4 w-4" />
                   <span>GitHub</span>
                 </a>
               )}
               
-              {profile.socialLinks.website && (
-                <a href={profile.socialLinks.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:text-primary transition-colors">
+              {socialLinks?.website && (
+                <a href={socialLinks.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:text-primary transition-colors">
                   <Globe className="h-4 w-4" />
                   <span>Website</span>
                 </a>
