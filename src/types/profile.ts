@@ -1,4 +1,17 @@
 
+export type Experience = {
+  job_title: string;
+  employer: string;
+  duration: number;
+  description: string;
+  skills: string[];
+};
+
+export type Certification = {
+  title: string;
+  issued_by: string;
+};
+
 export type ProfileData = {
   fullName: string;
   profilePicture: string | null;
@@ -14,6 +27,8 @@ export type ProfileData = {
     github?: string;
     website?: string;
   };
+  workExperiences?: Experience[];
+  professionalCertifications?: Certification[];
 };
 
 export type StepStatus = "not-started" | "in-progress" | "completed" | "skipped";

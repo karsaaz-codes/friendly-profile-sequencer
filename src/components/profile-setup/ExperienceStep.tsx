@@ -10,7 +10,7 @@ import { Briefcase, Building, Clock, Tag, Plus, Trash2 } from "lucide-react";
 import BackButton from "./BackButton";
 
 const ExperienceStep = () => {
-  const { experiences, setExperiences, saveAndContinue, skipStep } = useProfile();
+  const { experiences, setExperiences, saveAndContinue, skipStep, updateProfileData } = useProfile();
   
   const [newExperience, setNewExperience] = useState({
     job_title: "",
@@ -69,6 +69,13 @@ const ExperienceStep = () => {
   };
 
   const handleContinue = () => {
+    // Update profile data with experience information before continuing
+    updateProfileData({
+      // Store the experiences in the profile data
+      // This ensures the data is properly saved within the profile context
+      workExperiences: experiences
+    });
+    
     saveAndContinue();
   };
 
