@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,10 +9,10 @@ import {
   Briefcase, Award, Clock, User2
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 import { BASE_URL } from "../constants";
+import { useEffect, useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 interface Profile {
   id: number;
