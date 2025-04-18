@@ -9,7 +9,7 @@ import { Award, BookOpen, Plus, Trash2 } from "lucide-react";
 import BackButton from "./BackButton";
 
 const CertificationStep = () => {
-  const { certifications, setCertifications, saveAndContinue, skipStep, updateProfileData } = useProfile();
+  const { certifications, setCertifications, saveAndContinue, skipStep } = useProfile();
   
   const [newCertification, setNewCertification] = useState({
     title: "",
@@ -39,13 +39,6 @@ const CertificationStep = () => {
   };
 
   const handleContinue = () => {
-    // Update profile data with certification information before continuing
-    updateProfileData({
-      // Store the certifications in the profile data
-      // This ensures the data is properly saved within the profile context
-      professionalCertifications: certifications
-    });
-    
     saveAndContinue();
   };
 
